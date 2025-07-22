@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You'll definitely find it! Values Diagnosis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mint: #e1f7ee;
+      --white: #ffffff;
+      --accent-green: #7ac89f;
+      --dark-green: #1c4425;
+      --text: #333333;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+    body {
+      font-family: 'Sawarabi Gothic', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--mint);
+      color: var(--text);
+      animation: fadeIn 1.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      text-align: center;
+      color: var(--dark-green);
+      font-size: 3.5em;
+      margin: 40px 0;
+      text-shadow: 2px 2px 4px var(--shadow);
+    }
+    .description, .question, .result {
+      background: var(--white);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow);
+      animation: fadeIn 1s ease;
+    }
+    .description { border-left: 5px solid var(--accent-green); }
+    .question { border-left: 5px solid #a5d6ba; }
+    .question p { font-weight: bold; }
+    label {
+      display: block;
+      margin: 8px 0;
+      font-size: 1em;
+    }
+    button {
+      display: block;
+      width: 90%;
+      max-width: 320px;
+      margin: 30px auto;
+      padding: 14px 20px;
+      font-size: 16px;
+      background-color: var(--accent-green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #5abf91;
+      transform: translateY(-2px);
+    }
+    .result {
+      display: none;
+      border: 2px solid var(--accent-green);
+    }
+    .image-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    .image-row img {
+      max-width: 48%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid #c1e6db;
+    }
+    #resultLink {
+      display: inline-block;
+      margin-top: 15px;
+      color: var(--accent-green);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #resultLink:hover { text-decoration: underline; }
+    .feedback {
+      text-align: center;
+      margin: 40px auto;
+      animation: fadeIn 2s ease;
+    }
+    .feedback a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--accent-green);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .closing {
+      background-color: var(--white);
+      border-left: 5px solid var(--accent-green);
+      padding: 20px;
+      margin: 40px auto 20px;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--shadow);
+      animation: fadeIn 1.8s ease;
+    }
+    .closing h3 {
+      margin-top: 0;
+      color: var(--dark-green);
+    }
+    .closing p {
+      line-height: 1.7;
+    }
+    @media (max-width: 600px) {
+      body { padding: 15px; font-size: 15px; }
+      h1 { font-size: 2.3em; }
+      button { font-size: 15px; padding: 12px; }
+      .image-row img { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <h1>You'll definitely find it! Values Diagnosis</h1>
+
+  <div class="description">
+    <p>
+      This is a quick, 2-minute, 9-question diagnosis.<br>
+      Based on your results, we'll introduce sightseeing spots in Yamagata that match your values.<br>
+      Let's get started!
+    </p>
+  </div>
+
+  <div id="resultBox" class="result">
+    <h2>Diagnostic result</h2>
+    <p id="resultText"></p>
+    <div class="image-row">
+      <img id="resultImage1" src="" alt="diagnostic image1">
+      <img id="resultImage2" src="" alt="diagnostic image2">
+    </div>
+    <p><a id="resultLink" href="#" target="_blank">Tourist Attraction Information Site ← Click here</a></p>
+  </div>
+
+  <form id="quizForm" onsubmit="return false;">
+    <div id="questions"></div>
+    <button type="button" onclick="diagnose()">Diagnosis</button>
+  </form>
+
+  <div class="closing">
+    <h3>Finally...</h3>
+    <p>
+      Thank you for taking the diagnosis.<br>
+      Only you know your true values.<br>
+      Please go and experience what Yamagata has to offer!
+    </p>
+    <p style="text-align: right;">— Yamagata City Commercial High School Sagho chosa Club</p>
+  </div>
+
+  <div class="feedback">
+    <p>Please give us your comments and opinions about the diagnosis results</p>
+    <a href="mailto:example@example.com?subject=Values Diagnostic Feedback&body=Please provide your thoughts and opinions on the results of the diagnosis.">Send Feedback</a>
+  </div>
+
+  <script>
+    const questions = [
+      { text: "Question1: Where would you like to go?", choices: [ { text: "Resort", score: 6 }, { text: "Museum", score: 5 }, { text: "Shopping", score: 4 }, { text: "A place rich in nature", score: 3 }, { text: "Art museum", score: 2 }, { text: "Amusement park", score: 1 } ] },
+      { text: "Question2: What are the criteria you use to choose a house?", choices: [ { text: "Location", score: 6 }, { text: "Efficient use of space", score: 5 }, { text: "Rent", score: 4 }, { text: "Feng Shui (luck)", score: 3 }, { text: "House Layout", score: 2 }, { text: "Neighbors", score: 1 } ] },
+      { text: "Question3: What value do you cherish most in life?", choices: [ { text: "Authority", score: 6 }, { text: "Legitimacy", score: 5 }, { text: "Reasonableness", score: 4 }, { text: "Morals", score: 3 }, { text: "Beauty", score: 2 }, { text: "Cooperativeness", score: 1 } ] },
+      { text: "Question4: What makes you happy?", choices: [ { text: "To gain higher status", score: 6 }, { text: "Make the morally right choice", score: 5 }, { text: "To gain wealth", score: 4 }, { text: "To be cared for and loved", score: 3 }, { text: "To be free", score: 2 }, { text: "To cooperate and serve others", score: 1 } ] },
+      { text: "Question5: If you could improve just one ability, what would it be?", choices: [ { text: "To have better luck", score: 6 }, { text: "Intelligence", score: 5 }, { text: "Talent", score: 4 }, { text: "Forgiveness", score: 3 }, { text: "Attractive appearance", score: 2 }, { text: "Communication skills", score: 1 } ] },
+      { text: "Question6: What do you value most in a romantic partner?", choices: [ { text: "A reliable person", score: 6 }, { text: "A smart and intelligent person", score: 5 }, { text: "A wealthy person", score: 4 }, { text: "A kind and caring person", score: 3 }, { text: "Someone with a good sense of style", score: 2 }, { text: "A confident person", score: 1 } ] },
+      { text: "Question7: How do you respond when someone asks you for advice?", choices: [ { text: "Consider the impact on yourself", score: 6 }, { text: "Consider the cause", score: 5 }, { text: "Think of a solution", score: 4 }, { text: "Agree・Energize", score: 3 }, { text: "I guess that's fate too", score: 2 }, { text: "Consoling and cheering up", score: 1 } ] },
+      { text: "Question8: If you could have only one thing, what would it be?", choices: [ { text: "Future prediction ability", score: 6 }, { text: "Teleportation ability", score: 5 }, { text: "The ability to understand people", score: 4 }, { text: "The ability to read minds", score: 3 }, { text: "The ability to shapeshift", score: 2 }, { text: "The ability to control the weather", score: 1 } ] },
+      { text: "Question9: What is most important to you when you travel?", choices: [ { text: "Formality and prestige", score: 6 }, { text: "Efficiency", score: 5 }, { text: "Expenses", score: 4 }, { text: "Positive reputation", score: 3 }, { text: "Whether I could enjoy it", score: 2 }, { text: "Whether friends, family, or partner could enjoy it", score: 1 } ] }
+    ];
+
+    const typeResults = {
+      A: {
+        text: "Authority Type: A person who lives by power and values social status and competition.",
+        image1: "https://i.imgur.com/ZBmTGVo.jpg",
+        image2: "https://i.imgur.com/OJ6F497.jpg",
+        link: "https://sanho-oso.github.io/sanchokenieg/"
+      },
+      B: {
+        text: "Logical Type: A person who values logic and enjoys pursuing truth.",
+        image1: "https://i.imgur.com/g2s9ljy.jpg",
+        image2: "https://i.imgur.com/mu0it7z.jpg",
+        link: "https://sanho-oso.github.io/sanchorironeg/"
+      },
+      C: {
+        text: "Economic Type: A person who values economic gain and likes money.",
+        image1: "https://i.imgur.com/hFQZSzn.jpg",
+        image2: "https://i.imgur.com/4xPN4tq.jpg",
+        link: "https://sanho-oso.github.io/sanchokeizaieg/"
+      },
+      D: {
+        text: "Religious Type: A person who values religious morals and is drawn to the spiritual world.",
+        image1: "https://i.imgur.com/a4uX1VW.jpg",
+        image2: "https://i.imgur.com/OA0lMNP.jpg",
+        link: "https://sanho-oso.github.io/sanchosyukyoeg/"
+      },
+      E: {
+        text: "Aesthetic Type: A person who values beauty and lives by their sensitivity and feelings.",
+        image1: "https://i.imgur.com/lty2JvX.jpg",
+        image2: "https://i.imgur.com/xLitmKA.jpg",
+        link: "https://sanho-oso.github.io/sanchobitekieg/"
+      },
+      F: {
+        text: "Social Type: A person who values harmony and lives through friendship and love.",
+        image1: "https://i.imgur.com/rqUuQsO.jpg",
+        image2: "https://i.imgur.com/OXFOz37.jpg",
+        link: "https://sanho-oso.github.io/sanchosyakaieg/"
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("questions");
+      questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<p>${q.text}</p>`;
+        q.choices.forEach(choice => {
+          div.innerHTML += `<label><input type="radio" name="q${i}" value="${choice.score}"> ${choice.text}</label>`;
+        });
+        container.appendChild(div);
+      });
+    });
+
+    function diagnose() {
+      let total = 0;
+      for (let i = 0; i < questions.length; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          alert("Please answer all questions.");
+          return;
+        }
+        total += parseInt(selected.value);
+      }
+      const type = getResultType(total);
+      const result = typeResults[type];
+      document.getElementById("resultText").innerHTML = `${result.text}<br>Total score: <strong>${total} points</strong>`;
+      document.getElementById("resultImage1").src = result.image1;
+      document.getElementById("resultImage2").src = result.image2;
+      document.getElementById("resultLink").href = result.link;
+      document.getElementById("resultLink").style.display = "inline-block";
+      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function getResultType(score) {
+      if (score <= 9) return "F";
+      if (score <= 18) return "E";
+      if (score <= 27) return "D";
+      if (score <= 36) return "C";
+      if (score <= 45) return "B";
+      return "A";
+    }
+  </script>
+</body>
+</html>
+
+
